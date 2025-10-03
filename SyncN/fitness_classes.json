@@ -1,0 +1,330 @@
+[
+  {
+    "Class_Name": "Pilates",
+    "duration": "30 min",
+    "phase": [
+      "luteal",
+      "All"
+    ],
+    "type": [
+      "Pilates"
+    ],
+    "instructor": "Bri",
+    "intensity": "Mid",
+    "__id__": "3Gv5rLYM3kr3uBzj05Qn"
+  },
+  {
+    "Class_Name": "Intervals Guided Cardio",
+    "duration": "30 min",
+    "phase": [
+      "ovulation",
+      "All"
+    ],
+    "type": [
+      "Run",
+      "Cycle",
+      "Walk"
+    ],
+    "instructor": "Lizzy",
+    "intensity": "High",
+    "__id__": "3poO97WDQTN2B69qCTzg"
+  },
+  {
+    "Class_Name": "Circuit: Form Focus",
+    "duration": "18 min",
+    "phase": [
+      "follicular",
+      "ovulation",
+      "luteal",
+      "menstrual",
+      "All"
+    ],
+    "type": [
+      "Strength"
+    ],
+    "instructor": "Lizzy",
+    "intensity": "Mid",
+    "__id__": "3xs3yCxT0OLTi6CAqQVS"
+  },
+  {
+    "Class_Name": "Follicular Meditation",
+    "duration": "5 min",
+    "phase": [
+      "follicular",
+      "All"
+    ],
+    "type": [
+      "Meditation"
+    ],
+    "instructor": "Crystal",
+    "intensity": "Low",
+    "__id__": "7cONHW2waTmZx8H85Wcc"
+  },
+  {
+    "Class_Name": "Menstration Meditation ",
+    "duration": "5 min",
+    "phase": [
+      "menstrual",
+      "All"
+    ],
+    "type": [
+      "Meditation"
+    ],
+    "instructor": "Crystal",
+    "intensity": "Low",
+    "__id__": "CKQCB6dZPVuJdIZ02Ttf"
+  },
+  {
+    "Class_Name": "Anger Workout",
+    "duration": "15 min",
+    "phase": [
+      "luteal",
+      "All"
+    ],
+    "type": [
+      "Strength"
+    ],
+    "instructor": "Bri",
+    "intensity": "Mid-high",
+    "__id__": "DekSDUJzZI2zjSEegfMA"
+  },
+  {
+    "Class_Name": "Luteal Meditation",
+    "duration": "5 min",
+    "phase": [
+      "luteal",
+      "All"
+    ],
+    "type": [
+      "Meditation"
+    ],
+    "instructor": "Crystal",
+    "intensity": "Low",
+    "__id__": "IgY9bfrQlTHxESfhB2co"
+  },
+  {
+    "Class_Name": "HIIT / Boxing",
+    "duration": "35 min",
+    "phase": [
+      "ovulation",
+      "All"
+    ],
+    "type": [
+      "HIIT",
+      "Boxing"
+    ],
+    "instructor": "Bri",
+    "intensity": "High",
+    "__id__": "Jfi7aKpx7AOPgnPBpqgM"
+  },
+  {
+    "Class_Name": "Fresh Start Guided Cardio",
+    "duration": "30 min",
+    "phase": [
+      "follicular",
+      "All"
+    ],
+    "type": [
+      "Run",
+      "Walk",
+      "Cycle"
+    ],
+    "instructor": "Lizzy",
+    "intensity": "Mid",
+    "__id__": "KHFYKMe6CF1oVocvjw1S"
+  },
+  {
+    "Class_Name": "Test Workout",
+    "duration": "30 min",
+    "phase": [
+      "menstrual"
+    ],
+    "intensity": "medium",
+    "instructor": "System",
+    "createdBy": "n3KPH4MlMNcQnMUo86yQqdFh4Pj1",
+    "type": [
+      "cardio"
+    ],
+    "__id__": "QsIB5nrEYQBGnVov5ZP0"
+  },
+  {
+    "Class_Name": "Endurance Guided Cardio",
+    "duration": "30 min",
+    "phase": [
+      "luteal",
+      "All"
+    ],
+    "type": [
+      "Run",
+      "Cycle",
+      "Walk"
+    ],
+    "instructor": "Lizzy",
+    "intensity": "Mid-high",
+    "__id__": "SRdgmag3RZAaOsjkGZfz"
+  },
+  {
+    "Class_Name": "Rest Day",
+    "phase": [
+      "All"
+    ],
+    "duration": "all day",
+    "intensity": "low",
+    "type": [
+      "Rest"
+    ],
+    "instructor": "System",
+    "__id__": "Tqk6xcfqnmdRihJEt0X8"
+  },
+  {
+    "Class_Name": "Reflection Guided Cardio",
+    "duration": "20 min",
+    "phase": [
+      "menstrual",
+      "All"
+    ],
+    "type": [
+      "Run",
+      "Cycle",
+      "Walk"
+    ],
+    "instructor": "Lizzy",
+    "intensity": "Low",
+    "__id__": "VwQ7NYF4t1Ht3MlmIBKi"
+  },
+  {
+    "Class_Name": "Ovulation Meditation",
+    "duration": "4 min",
+    "phase": [
+      "ovulation",
+      "All"
+    ],
+    "type": [
+      "Meditation"
+    ],
+    "instructor": "Crystal",
+    "intensity": "Low",
+    "__id__": "cspKdImAtlQjIHn8IsyT"
+  },
+  {
+    "Class_Name": "Mindful Yoga",
+    "duration": "18 min",
+    "phase": [
+      "menstrual",
+      "All"
+    ],
+    "type": [
+      "Yoga"
+    ],
+    "instructor": "Elexia",
+    "intensity": "Low",
+    "__id__": "cvh0GDnTIZwe4usFrWEi"
+  },
+  {
+    "Class_Name": "Strength",
+    "duration": "21 min",
+    "phase": [
+      "ovulation",
+      "follicular",
+      "luteal",
+      "All"
+    ],
+    "type": [
+      "Strength"
+    ],
+    "instructor": "Bri",
+    "intensity": "Mid",
+    "__id__": "gCIz1Od49GhCir8zS9aT"
+  },
+  {
+    "Class_Name": "Dance Cardio, Affirmations Blast",
+    "duration": "20 min",
+    "phase": [
+      "follicular",
+      "ovulation",
+      "luteal",
+      "menstrual",
+      "All"
+    ],
+    "type": [
+      "Dance"
+    ],
+    "instructor": "Lizzy",
+    "intensity": "Mid",
+    "__id__": "kG8VYUWvpKU0SS4Tzep4"
+  },
+  {
+    "Class_Name": "Dance Cardio - the short one, Affirmations Blast",
+    "duration": "5 min",
+    "phase": [
+      "follicular",
+      "ovulation",
+      "luteal",
+      "menstrual",
+      "All"
+    ],
+    "type": [
+      "Dance"
+    ],
+    "instructor": "Lizzy",
+    "intensity": "Mid",
+    "__id__": "kavaSbdi9UQC3T95TDz0"
+  },
+  {
+    "Class_Name": "Pilates: Core Focus",
+    "duration": "18 min",
+    "phase": [
+      "follicular",
+      "luteal",
+      "All"
+    ],
+    "type": [
+      "Pilates"
+    ],
+    "instructor": "Bri",
+    "intensity": "Mid",
+    "__id__": "kcpdTdF2OmQK173lYQTC"
+  },
+  {
+    "Class_Name": "Spring Into Life Yoga",
+    "duration": "45 min",
+    "phase": [
+      "follicular",
+      "All"
+    ],
+    "type": [
+      "Yoga"
+    ],
+    "instructor": "Crystal",
+    "intensity": "Mid",
+    "__id__": "m9LO2CV2pMBj9zAYd45A"
+  },
+  {
+    "Class_Name": "Test Workout",
+    "duration": "30 min",
+    "phase": [
+      "menstrual"
+    ],
+    "intensity": "medium",
+    "instructor": "System",
+    "createdBy": "JKyDbisFhtRQAUhSJwowchhar9k1",
+    "type": [
+      "cardio"
+    ],
+    "__id__": "moMDBrJ81YZa3tpfpzE3"
+  },
+  {
+    "Class_Name": "Yoga - short one, Affirmations Blast",
+    "duration": "5 min",
+    "phase": [
+      "menstrual",
+      "All"
+    ],
+    "type": [
+      "Yoga"
+    ],
+    "instructor": "Elexia",
+    "intensity": "Low",
+    "__id__": "zJkN513uy0nNRIaNSeZQ"
+  }
+]
