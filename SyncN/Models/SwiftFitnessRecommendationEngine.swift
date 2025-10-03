@@ -130,46 +130,6 @@ class SwiftFitnessRecommendationEngine {
                     weeklyPlan.append(planEntry)
                     print("🎯 Day \(dayOffset): Added workout: \(workout.className)")
                 } else {
-<<<<<<< HEAD
-                    // Fallback to rest day if no workout found
-                    let restEntry = createRestDayEntry(date: currentDate, phase: currentPhase)
-                    weeklyPlan.append(restEntry)
-                    print("🎯 Day \(dayOffset): No workout found, added rest day")
-=======
-                    // Try to find a workout by relaxing restrictions
-                    print("🎯 Day \(dayOffset): No workout found with current restrictions, trying fallback options")
-                    
-                    // Try to get any available class for this phase (ignoring used classes)
-                    let allPhaseClasses = fitnessClassesManager.getClassesForPhase(currentPhase).filter { !$0.types.contains("Meditation") }
-                    
-                    if let fallbackClass = allPhaseClasses.first {
-                        // Create a workout entry from the first available class
-                        let planEntry = WeeklyFitnessPlanEntry(
-                            date: currentDate,
-                            workoutTitle: fallbackClass.className,
-                            workoutDescription: "Workout for \(currentPhase) phase",
-                            duration: Int(fallbackClass.duration) ?? 30,
-                            workoutType: mapWorkoutType(fallbackClass.types.first ?? "Workout"),
-                            cyclePhase: mapCyclePhase(currentPhase),
-                            difficulty: mapDifficulty(fallbackClass.intensity),
-                            equipment: fallbackClass.equipment ?? [],
-                            benefits: fallbackClass.benefits ?? [],
-                            instructor: fallbackClass.instructor,
-                            audioURL: nil,
-                            videoURL: nil,
-                            isVideo: false,
-                            injuries: nil,
-                            status: WorkoutStatus.suggested
-                        )
-                        weeklyPlan.append(planEntry)
-                        print("🎯 Day \(dayOffset): Added fallback workout (reusing class): \(fallbackClass.className)")
-                    } else {
-                        // Final fallback to rest day if absolutely no workout found
-                        let restEntry = createRestDayEntry(date: currentDate, phase: currentPhase)
-                        weeklyPlan.append(restEntry)
-                        print("🎯 Day \(dayOffset): No workout found even with fallback, added rest day")
-                    }
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
                 }
                 
             case .meditation:
@@ -218,13 +178,6 @@ class SwiftFitnessRecommendationEngine {
         
         print("🎯 SwiftFitnessEngine: Generated \(weeklyPlan.count) entries for 14-day plan")
         print("🎯 SwiftFitnessEngine: Fitness plan generation completed successfully!")
-<<<<<<< HEAD
-=======
-        
-        // Save the plan to JSON file for debugging
-        savePlanToJSON(weeklyPlan, userProfile: userProfile, userPreferences: userPreferences, startDate: startDate)
-        
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
         return weeklyPlan
     }
     
@@ -236,11 +189,6 @@ class SwiftFitnessRecommendationEngine {
         userPreferences: UserPreferences,
         startDate: Date
     ) -> [Int: DayType] {
-<<<<<<< HEAD
-=======
-        print("🎯 STARTING DAY TYPE DISTRIBUTION:")
-        print("🎯 Target: \(workoutDays) workouts, \(meditationDays) meditations, \(restDays) rest days")
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
         var dayTypes: [Int: DayType] = [:]
         
         // Create arrays for each day type
@@ -272,40 +220,16 @@ class SwiftFitnessRecommendationEngine {
             print("🎯 Plan start choice: \(planStartChoice) -> Target day: \(targetStartDay!)")
         }
         
-<<<<<<< HEAD
-        // STEP 2: Distribute workout days evenly, but avoid preferred rest days and target start day
+        // STEP 2: Distribute workout days evenly, avoiding preferred rest days
         if workoutDays > 0 {
             let workoutSpacing = 14.0 / Double(workoutDays)
+            print("🎯 Workout distribution: \(workoutDays) workouts, spacing: \(workoutSpacing)")
             for i in 0..<workoutDays {
                 let position = Int(Double(i) * workoutSpacing)
                 workoutPositions.append(position)
+                print("🎯 Added workout to day \(position)")
             }
-=======
-        // STEP 2: Distribute workout days evenly across BOTH weeks (3 per week for 6 total)
-        if workoutDays > 0 {
-            // For even distribution, aim for exactly 3 workouts per week
-            let targetWorkoutsPerWeek = 3
-            
-            // Week 1: days 0-6 (aim for 3 workouts)
-            let week1Positions = [0, 2, 4] // Spread evenly: Fri, Sun, Tue
-            for position in week1Positions {
-                if position >= 0 && position < 7 && workoutPositions.count < workoutDays {
-                    workoutPositions.append(position)
-                }
-            }
-            
-            // Week 2: days 7-13 (aim for 3 workouts)  
-            let week2Positions = [7, 9, 11] // Spread evenly: Fri, Sun, Tue (7 days later)
-            for position in week2Positions {
-                if position >= 7 && position < 14 && workoutPositions.count < workoutDays {
-                    workoutPositions.append(position)
-                }
-            }
-            
-            print("🎯 Initial workout positions (Week 1: 3, Week 2: 3): \(workoutPositions)")
-            print("🎯 Week 1 workouts: days \(workoutPositions.filter { $0 < 7 })")
-            print("🎯 Week 2 workouts: days \(workoutPositions.filter { $0 >= 7 })")
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
+            print("🎯 Initial workout positions: \(workoutPositions)")
         }
         
         // STEP 3: Distribute meditation days evenly, but avoid preferred rest days and target start day
@@ -320,96 +244,23 @@ class SwiftFitnessRecommendationEngine {
             print("🎯 Initial meditation positions: \(meditationPositions)")
         }
         
-        // STEP 4: Fill remaining positions with rest days
-        for day in 0..<14 {
-            if !workoutPositions.contains(day) && !meditationPositions.contains(day) {
-                restPositions.append(day)
-            }
-        }
-        
-<<<<<<< HEAD
-        // STEP 5: Ensure preferred rest days are actually rest days
+        // STEP 4: Ensure preferred rest days are respected
         for preferredDay in preferredRestDayOffsets {
-            if preferredDay < 14 {
-=======
-        // STEP 5: Ensure preferred rest days are actually rest days (but maintain workout count)
-        for preferredDay in preferredRestDayOffsets {
-            if preferredDay < 14 {
-                let wouldRemoveWorkout = workoutPositions.contains(preferredDay)
-                let currentWorkoutCount = workoutPositions.count
-                
-                // Only enforce rest day if we can maintain the target workout count
-                if wouldRemoveWorkout && currentWorkoutCount <= workoutDays {
-                    print("🎯 Skipping preferred rest day \(preferredDay) to maintain workout target (\(currentWorkoutCount) workouts needed)")
-                    continue
-                }
-                
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
-                // Remove from workout/meditation positions if present
-                workoutPositions.removeAll { $0 == preferredDay }
-                meditationPositions.removeAll { $0 == preferredDay }
-                
-                // Add to rest positions if not already there
-                if !restPositions.contains(preferredDay) {
-                    restPositions.append(preferredDay)
-                }
-                
-                print("🎯 Ensured day \(preferredDay) is a rest day (user preference)")
+            // Remove from workout/meditation positions if present
+            workoutPositions.removeAll { $0 == preferredDay }
+            meditationPositions.removeAll { $0 == preferredDay }
+            
+            // Add to rest positions if not already there
+            if !restPositions.contains(preferredDay) {
+                restPositions.append(preferredDay)
             }
+            
+            print("🎯 Ensured day \(preferredDay) is a rest day (user preference)")
         }
         
-<<<<<<< HEAD
-=======
-        // STEP 5.5: Add missing workouts if we don't have enough
-        let currentWorkoutCount = workoutPositions.count
-        if currentWorkoutCount < workoutDays {
-            let missingWorkouts = workoutDays - currentWorkoutCount
-            print("🎯 Need to add \(missingWorkouts) more workouts to reach target of \(workoutDays)")
-            
-            // Find available days that are not meditation days, prioritizing non-preferred rest days
-            var availableDays: [Int] = []
-            var preferredRestDays: [Int] = []
-            
-            for day in 0..<14 {
-                if !workoutPositions.contains(day) && !meditationPositions.contains(day) {
-                    if preferredRestDayOffsets.contains(day) {
-                        preferredRestDays.append(day)
-                    } else {
-                        availableDays.append(day)
-                    }
-                }
-            }
-            
-            // First, try to add workouts to non-preferred rest days
-            var workoutsAdded = 0
-            for i in 0..<min(missingWorkouts, availableDays.count) {
-                let newWorkoutDay = availableDays[i]
-                workoutPositions.append(newWorkoutDay)
-                restPositions.removeAll { $0 == newWorkoutDay }
-                print("🎯 Added workout to day \(newWorkoutDay) to reach target count")
-                workoutsAdded += 1
-            }
-            
-            // If we still need more workouts, override preferred rest days
-            let stillMissing = missingWorkouts - workoutsAdded
-            if stillMissing > 0 {
-                print("🎯 Still need \(stillMissing) more workouts, overriding preferred rest days")
-                for i in 0..<min(stillMissing, preferredRestDays.count) {
-                    let newWorkoutDay = preferredRestDays[i]
-                    workoutPositions.append(newWorkoutDay)
-                    restPositions.removeAll { $0 == newWorkoutDay }
-                    print("🎯 Added workout to preferred rest day \(newWorkoutDay) to reach target count")
-                }
-            }
-        }
-        
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
-        // STEP 6: Ensure target start day is a workout (highest priority)
+        // STEP 5: Ensure target start day is a workout (highest priority)
         if let targetDay = targetStartDay, workoutDays > 0 {
             print("🎯 FORCING day \(targetDay) to be a workout (start choice: \(userPreferences.planStartChoice ?? "nil"))")
-            
-            // Check if target day was originally a meditation
-            let wasMeditationDay = meditationPositions.contains(targetDay)
             
             // Remove target day from any other category
             workoutPositions.removeAll { $0 == targetDay }
@@ -419,88 +270,29 @@ class SwiftFitnessRecommendationEngine {
             // Add target day as workout
             workoutPositions.append(targetDay)
             
-<<<<<<< HEAD
-            // If we removed a meditation day, we need to add it back elsewhere to maintain 1 meditation per week
-            if wasMeditationDay && meditationPositions.count < meditationDays {
-                print("🎯 Target day \(targetDay) was a meditation day, need to re-add meditation elsewhere")
-                
-                // Try to find a suitable day for meditation (preferably in the same week)
-                let targetWeek = targetDay < 7 ? 0 : 1
-                let weekStart = targetWeek * 7
-                let weekEnd = weekStart + 7
-                
-                // First, try to find a day in the same week
-                var foundMeditationDay = false
-                for day in weekStart..<weekEnd {
-                    if !workoutPositions.contains(day) && 
-                       !preferredRestDayOffsets.contains(day) && 
-                       !meditationPositions.contains(day) {
-                        meditationPositions.append(day)
-                        print("🎯 Added meditation to day \(day) in same week to maintain 1 meditation per week")
-=======
-            // If we removed a meditation day, we need to add it back elsewhere to maintain correct meditation count
-            if wasMeditationDay && meditationPositions.count < meditationDays {
-                print("🎯 Target day \(targetDay) was a meditation day, need to re-add meditation elsewhere")
-                
-                // Find a suitable day for meditation that's not a preferred rest day or workout day
-                var foundMeditationDay = false
-                for day in 0..<14 {
-                    if !workoutPositions.contains(day) && 
-                       !preferredRestDayOffsets.contains(day) && 
-                       !meditationPositions.contains(day) &&
-                       !restPositions.contains(day) {
-                        meditationPositions.append(day)
-                        // Remove from rest positions if it was there
-                        restPositions.removeAll { $0 == day }
-                        print("🎯 Added meditation to day \(day) to maintain correct meditation count")
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
-                        foundMeditationDay = true
-                        break
-                    }
-                }
-                
-<<<<<<< HEAD
-                // If no suitable day in same week, try the other week
-                if !foundMeditationDay {
-                    let otherWeekStart = targetWeek == 0 ? 7 : 0
-                    let otherWeekEnd = otherWeekStart + 7
-                    for day in otherWeekStart..<otherWeekEnd {
-                        if !workoutPositions.contains(day) && 
-                           !preferredRestDayOffsets.contains(day) && 
-                           !meditationPositions.contains(day) {
-                            meditationPositions.append(day)
-                            print("🎯 Added meditation to day \(day) in other week to maintain 1 meditation per week")
-=======
-                // If no suitable day found, try to replace a rest day that's not preferred
-                if !foundMeditationDay {
-                    for day in 0..<14 {
-                        if restPositions.contains(day) && !preferredRestDayOffsets.contains(day) {
-                            restPositions.removeAll { $0 == day }
-                            meditationPositions.append(day)
-                            print("🎯 Replaced rest day \(day) with meditation to maintain correct count")
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
-                            break
-                        }
-                    }
-                }
-            }
-            
             // If we now have too many workouts, remove one and make it rest
             if workoutPositions.count > workoutDays {
-<<<<<<< HEAD
-                if let extraWorkoutDay = workoutPositions.first(where: { $0 != targetDay }) {
-=======
-                if let extraWorkoutDay = workoutPositions.first(where: { $0 != targetDay && !preferredRestDayOffsets.contains($0) }) {
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
-                    workoutPositions.removeAll { $0 == extraWorkoutDay }
-                    if !restPositions.contains(extraWorkoutDay) {
-                        restPositions.append(extraWorkoutDay)
+                // Find a day that's not the target day and not a preferred rest day
+                for day in 0..<14 {
+                    if day != targetDay && !preferredRestDayOffsets.contains(day) {
+                        workoutPositions.removeAll { $0 == day }
+                        if !restPositions.contains(day) {
+                            restPositions.append(day)
+                        }
+                        print("🎯 Moved day \(day) to rest to make room for target start day \(targetDay)")
+                        break
                     }
-                    print("🎯 Moved day \(extraWorkoutDay) to rest to make room for target start day \(targetDay)")
                 }
             }
             
             print("🎯 Ensured day \(targetDay) is a workout (start choice preference)")
+        }
+        
+        // STEP 6: Fill remaining positions with rest days
+        for day in 0..<14 {
+            if !workoutPositions.contains(day) && !meditationPositions.contains(day) && !restPositions.contains(day) {
+                restPositions.append(day)
+            }
         }
         
         // Assign day types
@@ -531,90 +323,6 @@ class SwiftFitnessRecommendationEngine {
         print("🎯 FINAL COUNTS: \(workoutCount) workouts, \(meditationCount) meditations, \(restCount) rest days")
         print("🎯 EXPECTED: \(workoutDays) workouts, \(meditationDays) meditations, \(restDays) rest days")
         
-<<<<<<< HEAD
-=======
-        // DEBUG: Show exact comparison
-        print("🎯 RECOVERY CHECK: workoutCount (\(workoutCount)) < workoutDays (\(workoutDays)) = \(workoutCount < workoutDays)")
-        
-        // FINAL RECOVERY: Ensure we have the correct workout count AND even distribution
-        if workoutCount < workoutDays {
-            let missingWorkouts = workoutDays - workoutCount
-            print("🎯 FINAL RECOVERY: Need to add \(missingWorkouts) more workouts to reach target")
-            
-            // Count current workouts per week
-            var week1Workouts = 0
-            var week2Workouts = 0
-            for day in 0..<14 {
-                if dayTypes[day] == .workout {
-                    if day < 7 {
-                        week1Workouts += 1
-                    } else {
-                        week2Workouts += 1
-                    }
-                }
-            }
-            
-            print("🎯 FINAL RECOVERY: Current distribution - Week 1: \(week1Workouts), Week 2: \(week2Workouts)")
-            
-            // Find rest days that can be converted, prioritizing the week with fewer workouts
-            var week1RestDays: [Int] = []
-            var week2RestDays: [Int] = []
-            
-            for day in 0..<14 {
-                if dayTypes[day] == .rest {
-                    if day < 7 {
-                        week1RestDays.append(day)
-                    } else {
-                        week2RestDays.append(day)
-                    }
-                }
-            }
-            
-            // Convert rest days to workouts, prioritizing even distribution
-            var workoutsToAdd = missingWorkouts
-            
-            // If week 2 has fewer workouts, prioritize adding to week 2
-            if week2Workouts < week1Workouts && workoutsToAdd > 0 {
-                if let dayToConvert = week2RestDays.first {
-                    dayTypes[dayToConvert] = .workout
-                    print("🎯 FINAL RECOVERY: Converted rest day \(dayToConvert) to workout (Week 2 balance)")
-                    workoutsToAdd -= 1
-                    week2Workouts += 1
-                    // Remove from available rest days to avoid double-conversion
-                    week2RestDays.removeFirst()
-                }
-            }
-            
-            // Add remaining workouts to any available rest days
-            let allRestDays = week1RestDays + week2RestDays
-            var remainingRestDays = allRestDays
-            
-            for _ in 0..<min(workoutsToAdd, remainingRestDays.count) {
-                if let dayToConvert = remainingRestDays.first {
-                    if dayTypes[dayToConvert] == .rest { // Double-check it's still a rest day
-                        dayTypes[dayToConvert] = .workout
-                        print("🎯 FINAL RECOVERY: Converted rest day \(dayToConvert) to workout")
-                        remainingRestDays.removeFirst() // Remove to avoid double-conversion
-                    }
-                }
-            }
-            
-            // Update the final counts
-            workoutCount = 0
-            meditationCount = 0
-            restCount = 0
-            for day in 0..<14 {
-                let dayType = dayTypes[day] ?? .rest
-                switch dayType {
-                case .workout: workoutCount += 1
-                case .meditation: meditationCount += 1
-                case .rest: restCount += 1
-                }
-            }
-            print("🎯 CORRECTED FINAL COUNTS: \(workoutCount) workouts, \(meditationCount) meditations, \(restCount) rest days")
-        }
-        
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
         return dayTypes
     }
     
@@ -837,20 +545,6 @@ class SwiftFitnessRecommendationEngine {
         )
         print("🎯 Day \(dayOffset): After injury filtering: \(filteredClasses.count) classes")
         
-<<<<<<< HEAD
-        // Step 4: Apply intensity rules based on cycle phase
-        filteredClasses = applyIntensityRules(
-            classes: filteredClasses,
-            phase: phase
-        )
-        print("🎯 Day \(dayOffset): After intensity filtering: \(filteredClasses.count) classes")
-=======
-        // Step 4: Apply phase-based scoring (preference, not strict filtering)
-        // Instead of strict intensity rules, we'll score phase-appropriate workouts higher
-        // but still allow all phase-specific workouts to be available
-        print("🎯 Day \(dayOffset): Phase '\(phase)' workouts available: \(filteredClasses.count) classes")
-        print("🎯 Day \(dayOffset): Using phase-specific workouts (no strict intensity filtering)")
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
         
         // Step 5: Remove classes already used this week
         filteredClasses = filteredClasses.filter { fitnessClass in
@@ -930,30 +624,13 @@ class SwiftFitnessRecommendationEngine {
         return filteredClasses
     }
     
-<<<<<<< HEAD
-=======
-    // DEPRECATED: This function is no longer used for strict filtering
-    // Instead, we use phase-specific workouts and scoring-based preferences
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
     private func applyIntensityRules(
         classes: [FitnessClassData],
         phase: String
     ) -> [FitnessClassData] {
-        
-<<<<<<< HEAD
-        let preferredIntensities = getPreferredIntensities(for: phase)
-        print("🎯 Phase '\(phase)' prefers intensities: \(preferredIntensities)")
-        
-        return classes.filter { fitnessClass in
-            let intensity = fitnessClass.intensity.lowercased().trimmingCharacters(in: .whitespaces)
-            return preferredIntensities.contains(intensity)
-        }
-=======
-        // Return all classes - no longer apply strict intensity filtering
-        // Phase-appropriate scoring is handled in the scoreClasses function instead
-        print("🎯 Phase '\(phase)': Allowing all phase-specific workouts (no intensity filtering)")
+        // For now, return all classes without intensity filtering
+        // This can be enhanced later with phase-specific intensity rules
         return classes
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
     }
     
     private func preventMultipleDanceCardioInWeek(
@@ -1176,39 +853,10 @@ class SwiftFitnessRecommendationEngine {
                 }
             }
             
-            
-<<<<<<< HEAD
-            // Bonus for appropriate intensity for fitness level
+            // Bonus for matching fitness level with intensity
             let fitnessLevel = userPreferences.fitnessLevel.lowercased()
-            let intensity = fitnessClass.intensity.lowercased().trimmingCharacters(in: .whitespaces)
+            let intensity = fitnessClass.intensity.lowercased()
             
-=======
-            // PHASE-BASED SCORING: Bonus for phase-appropriate intensity (preference, not strict rule)
-            let fitnessLevel = userPreferences.fitnessLevel.lowercased()
-            let intensity = fitnessClass.intensity.lowercased().trimmingCharacters(in: .whitespaces)
-            
-            // Give higher scores to phase-appropriate intensities, but don't exclude others
-            if let currentPhase = phase {
-                switch currentPhase.lowercased() {
-                case "menstrual":
-                    if intensity == "low" { score += 2 } // Prefer low intensity
-                    else { score += 0 } // But don't exclude others
-                case "follicular":
-                    if intensity == "mid" || intensity == "high" { score += 2 } // Prefer building energy
-                    else { score += 0 }
-                case "ovulatory", "ovulation":
-                    if intensity == "high" { score += 2 } // Prefer high intensity
-                    else { score += 0 }
-                case "luteal":
-                    if intensity == "mid" || intensity == "low" { score += 2 } // Prefer moderate
-                    else { score += 0 }
-                default:
-                    score += 0
-                }
-            }
-            
-            // Additional bonus for appropriate intensity for fitness level
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
             if fitnessLevel.contains("beginner") && intensity == "low" {
                 score += 1
             } else if fitnessLevel.contains("intermediate") && (intensity == "mid" || intensity == "low") {
@@ -1233,17 +881,6 @@ class SwiftFitnessRecommendationEngine {
                 }
             }
             
-<<<<<<< HEAD
-=======
-            // HIGHEST PRIORITY: Bonus for phase-specific workouts (designed for this phase)
-            if let currentPhase = phase {
-                if fitnessClass.phases.contains(where: { $0.lowercased() == currentPhase.lowercased() }) {
-                    score += 4 // High bonus for workouts specifically designed for this phase
-                    print("🎯 Phase-specific workout bonus applied: \(fitnessClass.className) for \(currentPhase) phase")
-                }
-            }
-            
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
             return (fitnessClass: fitnessClass, score: score)
         }
     }
@@ -1300,11 +937,7 @@ class SwiftFitnessRecommendationEngine {
             workoutTitle: "Rest Day",
             workoutDescription: "Scheduled rest day for recovery",
             duration: 0,
-<<<<<<< HEAD
             workoutType: .meditation,
-=======
-            workoutType: .yoga, // Use yoga instead of meditation for rest days
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
             cyclePhase: mapCyclePhase(phase),
             difficulty: .beginner,
             equipment: [],
@@ -1411,140 +1044,6 @@ class SwiftFitnessRecommendationEngine {
             workout.title == className
         }
     }
-<<<<<<< HEAD
-=======
-    
-    // MARK: - JSON Export for Debugging
-    private func savePlanToJSON(_ plan: [WeeklyFitnessPlanEntry], userProfile: UserProfile, userPreferences: UserPreferences, startDate: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
-        let timestamp = dateFormatter.string(from: Date())
-        
-        // Create a comprehensive plan object for JSON export
-        let planExport = FitnessPlanExport(
-            generatedAt: Date(),
-            startDate: startDate,
-            userProfile: UserProfileExport(from: userProfile),
-            userPreferences: UserPreferencesExport(from: userPreferences),
-            plan: plan.map { entry in
-                FitnessPlanEntryExport(
-                    date: entry.date,
-                    workoutTitle: entry.workoutTitle,
-                    workoutDescription: entry.workoutDescription,
-                    duration: entry.duration,
-                    workoutType: entry.workoutType.rawValue,
-                    cyclePhase: entry.cyclePhase.rawValue,
-                    difficulty: entry.difficulty.rawValue,
-                    equipment: entry.equipment,
-                    benefits: entry.benefits,
-                    instructor: entry.instructor,
-                    audioURL: entry.audioURL,
-                    videoURL: entry.videoURL,
-                    isVideo: entry.isVideo,
-                    status: entry.status.rawValue
-                )
-            }
-        )
-        
-        do {
-            let jsonData = try JSONEncoder().encode(planExport)
-            let jsonString = String(data: jsonData, encoding: .utf8) ?? "Failed to convert to string"
-            
-            // Save to Documents directory
-            guard let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-                print("❌ Could not access Documents directory")
-                return
-            }
-            let fileName = "fitness_plan_\(timestamp).json"
-            let fileURL = documentsPath.appendingPathComponent(fileName)
-            
-            try jsonString.write(to: fileURL, atomically: true, encoding: .utf8)
-            print("🎯 Fitness plan saved to: \(fileURL.path)")
-            print("🎯 File name: \(fileName)")
-            
-            // Also print a summary to console
-            printPlanSummary(plan, userPreferences: userPreferences, startDate: startDate)
-            
-        } catch {
-            print("❌ Failed to save fitness plan to JSON: \(error)")
-        }
-    }
-    
-    private func printPlanSummary(_ plan: [WeeklyFitnessPlanEntry], userPreferences: UserPreferences, startDate: Date) {
-        print("\n🎯 ===== FITNESS PLAN SUMMARY =====")
-        print("🎯 Start Date: \(startDate)")
-        print("🎯 Workout Frequency: \(userPreferences.workoutFrequency) days/week")
-        print("🎯 Favorite Workouts: \(userPreferences.favoriteWorkouts)")
-        print("🎯 Disliked Workouts: \(userPreferences.dislikedWorkouts)")
-        print("🎯 Preferred Rest Days: \(userPreferences.preferredRestDays)")
-        print("🎯 Plan Start Choice: \(userPreferences.planStartChoice ?? "nil")")
-        print("🎯 ===== 14-DAY PLAN =====")
-        
-        for (index, entry) in plan.enumerated() {
-            let dayType = entry.workoutTitle == "Rest Day" ? "REST" : 
-                         entry.workoutType == .meditation ? "MEDITATION" : "WORKOUT"
-            print("🎯 Day \(index + 1): \(dayType) - \(entry.workoutTitle) (\(entry.duration)min)")
-        }
-        
-        let workoutCount = plan.filter { $0.workoutTitle != "Rest Day" && $0.workoutType != .meditation }.count
-        let meditationCount = plan.filter { $0.workoutType == .meditation && $0.workoutTitle != "Rest Day" }.count
-        let restCount = plan.filter { $0.workoutTitle == "Rest Day" }.count
-        
-        print("🎯 ===== TOTALS =====")
-        print("🎯 Workouts: \(workoutCount)")
-        print("🎯 Meditations: \(meditationCount)")
-        print("🎯 Rest Days: \(restCount)")
-        print("🎯 ===================\n")
-    }
-    
-    // MARK: - JSON File Management
-    static func getSavedFitnessPlans() -> [URL] {
-        guard let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            print("❌ Could not access Documents directory")
-            return []
-        }
-        
-        do {
-            let files = try FileManager.default.contentsOfDirectory(at: documentsPath, includingPropertiesForKeys: nil)
-            return files.filter { $0.lastPathComponent.hasPrefix("fitness_plan_") && $0.pathExtension == "json" }
-                .sorted { $0.lastPathComponent > $1.lastPathComponent } // Most recent first
-        } catch {
-            print("❌ Failed to list fitness plan files: \(error)")
-            return []
-        }
-    }
-    
-    static func getLatestFitnessPlan() -> FitnessPlanExport? {
-        let files = getSavedFitnessPlans()
-        guard let latestFile = files.first else {
-            print("❌ No fitness plan files found")
-            return nil
-        }
-        
-        do {
-            let data = try Data(contentsOf: latestFile)
-            let plan = try JSONDecoder().decode(FitnessPlanExport.self, from: data)
-            print("✅ Loaded latest fitness plan from: \(latestFile.lastPathComponent)")
-            return plan
-        } catch {
-            print("❌ Failed to load fitness plan from \(latestFile.lastPathComponent): \(error)")
-            return nil
-        }
-    }
-    
-    static func printSavedPlansList() {
-        let files = getSavedFitnessPlans()
-        print("\n🎯 ===== SAVED FITNESS PLANS =====")
-        if files.isEmpty {
-            print("🎯 No saved fitness plans found")
-        } else {
-            for (index, file) in files.enumerated() {
-                print("🎯 \(index + 1). \(file.lastPathComponent)")
-            }
-        }
-        print("🎯 ================================\n")
-    }
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
 }
 
 // MARK: - User Preferences Model
@@ -1619,79 +1118,4 @@ struct UserPreferences {
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
     }
-<<<<<<< HEAD
-=======
-}
-
-// MARK: - JSON Export Data Structures
-struct FitnessPlanExport: Codable {
-    let generatedAt: Date
-    let startDate: Date
-    let userProfile: UserProfileExport
-    let userPreferences: UserPreferencesExport
-    let plan: [FitnessPlanEntryExport]
-}
-
-struct UserProfileExport: Codable {
-    let cycleLength: Int?
-    let lastPeriodStart: Date?
-    let averagePeriodLength: Int?
-    let cycleType: String?
-    let currentCyclePhase: String?
-    let hasRecurringSymptoms: Bool?
-    let lastSymptomsStart: Date?
-    let averageSymptomDays: Int?
-    let useMoonCycle: Bool?
-    
-    init(from userProfile: UserProfile) {
-        self.cycleLength = userProfile.cycleLength
-        self.lastPeriodStart = userProfile.lastPeriodStart
-        self.averagePeriodLength = userProfile.averagePeriodLength
-        self.cycleType = userProfile.cycleType?.rawValue
-        self.currentCyclePhase = userProfile.currentCyclePhase?.rawValue
-        self.hasRecurringSymptoms = userProfile.hasRecurringSymptoms
-        self.lastSymptomsStart = userProfile.lastSymptomsStart
-        self.averageSymptomDays = userProfile.averageSymptomDays
-        self.useMoonCycle = userProfile.personalizationData?.useMoonCycle
-    }
-}
-
-struct UserPreferencesExport: Codable {
-    let fitnessLevel: String
-    let fitnessGoal: String?
-    let workoutFrequency: Int
-    let favoriteWorkouts: [String]
-    let dislikedWorkouts: [String]
-    let pastInjuries: [String]
-    let preferredRestDays: [String]
-    let planStartChoice: String?
-    
-    init(from userPreferences: UserPreferences) {
-        self.fitnessLevel = userPreferences.fitnessLevel
-        self.fitnessGoal = userPreferences.fitnessGoal
-        self.workoutFrequency = userPreferences.workoutFrequency
-        self.favoriteWorkouts = userPreferences.favoriteWorkouts
-        self.dislikedWorkouts = userPreferences.dislikedWorkouts
-        self.pastInjuries = userPreferences.pastInjuries
-        self.preferredRestDays = userPreferences.preferredRestDays
-        self.planStartChoice = userPreferences.planStartChoice
-    }
-}
-
-struct FitnessPlanEntryExport: Codable {
-    let date: Date
-    let workoutTitle: String
-    let workoutDescription: String
-    let duration: Int
-    let workoutType: String
-    let cyclePhase: String
-    let difficulty: String
-    let equipment: [String]
-    let benefits: [String]
-    let instructor: String?
-    let audioURL: String?
-    let videoURL: String?
-    let isVideo: Bool
-    let status: String
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
 }

@@ -1209,11 +1209,8 @@ struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var userProfiles: [UserProfile]
     @Query private var userRewards: [UserRewardsData]
-<<<<<<< HEAD
-=======
     @State private var debugTapCount = 0
     @State private var showingDebugView = false
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
     
     var userProfile: UserProfile? {
         userProfiles.first
@@ -1243,8 +1240,6 @@ struct ProfileView: View {
             }
             .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.large)
-<<<<<<< HEAD
-=======
             .onTapGesture(count: 3) {
                 // Triple tap on the navigation title to show debug view
                 showingDebugView = true
@@ -1252,7 +1247,6 @@ struct ProfileView: View {
         }
         .sheet(isPresented: $showingDebugView) {
             FitnessPlanDebugView()
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
         }
     }
     
@@ -1268,11 +1262,9 @@ struct ProfileSettingsView: View {
     @State private var showingNotificationSettings = false
     @State private var showingRaceTrainingSetup = false
     @State private var showingRaceTrainingPlan = false
-<<<<<<< HEAD
     @State private var showingAccountSettings = false
     @State private var showingCreateAccount = false
-=======
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
+
     
     var personalization: PersonalizationData? {
         personalizationData.first
@@ -1321,7 +1313,6 @@ struct ProfileSettingsView: View {
             }
             
             SettingsSection(title: "Account") {
-<<<<<<< HEAD
                 if AuthenticationManager.shared.isAuthenticated {
                     SettingsRow(icon: "person.circle", title: "Account Settings", action: {
                         showingAccountSettings = true
@@ -1334,8 +1325,6 @@ struct ProfileSettingsView: View {
                         showingCreateAccount = true
                     })
                 }
-=======
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
                 SettingsRow(icon: "bell", title: "Notifications", action: {
                     showingNotificationSettings = true
                 })
@@ -1371,7 +1360,6 @@ struct ProfileSettingsView: View {
         .sheet(isPresented: $showingRaceTrainingPlan) {
             RaceTrainingPlanView()
         }
-<<<<<<< HEAD
         .sheet(isPresented: $showingAccountSettings) {
             UserProfileView()
         }
@@ -1385,8 +1373,6 @@ struct ProfileSettingsView: View {
                 }
             )
         }
-=======
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
     }
     
     private func openEmailApp() {

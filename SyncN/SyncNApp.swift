@@ -72,13 +72,10 @@ struct SyncNApp: App {
             UserRewardsData.self,
             CharmProgress.self,
             VideoProgress.self,
-<<<<<<< HEAD
             // Authentication models
             AuthUser.self,
             AuthSession.self,
             PasswordResetToken.self,
-=======
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
         ])
         
         let modelConfiguration = ModelConfiguration(
@@ -106,13 +103,9 @@ struct SyncNApp: App {
 
     var body: some Scene {
         WindowGroup {
-<<<<<<< HEAD
             AuthenticationWrapper {
                 SplashScreenView()
             }
-=======
-            SplashScreenView()
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
         }
         .modelContainer(sharedModelContainer)
     }

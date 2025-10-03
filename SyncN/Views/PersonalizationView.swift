@@ -261,21 +261,20 @@ struct FitnessPersonalizationView: View {
                     WorkoutFrequencyStepView(workoutFrequency: $workoutFrequency)
                         .tag(2)
                         .onChange(of: workoutFrequency) { _, newValue in
-<<<<<<< HEAD
                             if newValue != nil && currentStep == 2 {
                                 withAnimation {
                                     currentStep += 1
-=======
-                            if let frequency = newValue {
-                                // Auto-set desiredWorkoutFrequency based on workoutFrequency selection
-                                desiredWorkoutFrequency = mapWorkoutFrequencyToDesired(frequency)
-                                print("🔍 PersonalizationView: Auto-mapped workoutFrequency '\(frequency.rawValue)' to desiredWorkoutFrequency '\(desiredWorkoutFrequency?.rawValue ?? "nil")'")
-                                
-                                if currentStep == 2 {
-                                    withAnimation {
-                                        currentStep += 1
+                                }
+                                if let frequency = newValue {
+                                    // Auto-set desiredWorkoutFrequency based on workoutFrequency selection
+                                    desiredWorkoutFrequency = mapWorkoutFrequencyToDesired(frequency)
+                                    print("🔍 PersonalizationView: Auto-mapped workoutFrequency '\(frequency.rawValue)' to desiredWorkoutFrequency '\(desiredWorkoutFrequency?.rawValue ?? "nil")'")
+                                    
+                                    if currentStep == 2 {
+                                        withAnimation {
+                                            currentStep += 1
+                                        }
                                     }
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
                                 }
                             }
                         }
@@ -382,10 +381,8 @@ struct FitnessPersonalizationView: View {
         print("🔍 PersonalizationView: fitnessGoals = \(Array(fitnessGoals).map { $0.rawValue })")
         print("🔍 PersonalizationView: fitnessLevel = \(fitnessLevel?.rawValue ?? "nil")")
         print("🔍 PersonalizationView: workoutFrequency = \(workoutFrequency?.rawValue ?? "nil")")
-<<<<<<< HEAD
-=======
+
         print("🔍 PersonalizationView: desiredWorkoutFrequency = \(desiredWorkoutFrequency?.rawValue ?? "nil")")
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
         print("🔍 PersonalizationView: favoriteWorkouts.count = \(favoriteWorkouts.count)")
         print("🔍 PersonalizationView: syncNSupport = \(syncNSupport?.rawValue ?? "nil")")
         print("🔍 PersonalizationView: preferredRestDays.count = \(preferredRestDays.count)")
@@ -394,8 +391,6 @@ struct FitnessPersonalizationView: View {
         return canProceed
     }
     
-<<<<<<< HEAD
-=======
     // Helper function to map WorkoutFrequency to DesiredWorkoutFrequency
     private func mapWorkoutFrequencyToDesired(_ frequency: WorkoutFrequency) -> DesiredWorkoutFrequency {
         switch frequency {
@@ -412,7 +407,6 @@ struct FitnessPersonalizationView: View {
         }
     }
     
->>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
     private func completeFitnessPersonalization() {
         print("🎯 PERSONALIZATION COMPLETION TRIGGERED!")
         print("🎯 Starting fitness personalization completion...")

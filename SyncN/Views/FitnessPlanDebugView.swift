@@ -2,8 +2,7 @@ import SwiftUI
 import Foundation
 
 struct FitnessPlanDebugView: View {
-    @State private var generatedPlan: FitnessPlanExport?
-    @State private var savedPlans: [URL] = []
+    @State private var generatedPlan: [WeeklyFitnessPlanEntry] = []
     @State private var isLoading = false
     @State private var showingAlert = false
     @State private var alertMessage = ""
@@ -22,16 +21,13 @@ struct FitnessPlanDebugView: View {
                     .buttonStyle(.borderedProminent)
                     .disabled(isLoading)
                     
-                    Button("List Saved Plans") {
-                        listSavedPlans()
+                    Button("Clear Plan") {
+                        generatedPlan = []
+                        alertMessage = "Plan cleared"
+                        showingAlert = true
                     }
                     .buttonStyle(.bordered)
-                    
-                    Button("Load Latest Plan") {
-                        loadLatestPlan()
-                    }
-                    .buttonStyle(.bordered)
-                    .disabled(savedPlans.isEmpty)
+                    .disabled(generatedPlan.isEmpty)
                 }
                 
                 if isLoading {
@@ -39,26 +35,22 @@ struct FitnessPlanDebugView: View {
                         .padding()
                 }
                 
-                if let plan = generatedPlan {
+                if !generatedPlan.isEmpty {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Generated Plan Summary")
                                 .font(.headline)
                                 .padding(.bottom, 5)
                             
-                            Text("Generated: \(plan.generatedAt, formatter: dateFormatter)")
-                            Text("Start Date: \(plan.startDate, formatter: dateFormatter)")
-                            Text("Workout Frequency: \(plan.userPreferences.workoutFrequency) days/week")
-                            Text("Favorite Workouts: \(plan.userPreferences.favoriteWorkouts.joined(separator: ", "))")
-                            Text("Disliked Workouts: \(plan.userPreferences.dislikedWorkouts.joined(separator: ", "))")
+                            Text("Plan Entries: \(generatedPlan.count)")
                             
                             Divider()
                             
-                            Text("14-Day Plan:")
+                            Text("Weekly Plan:")
                                 .font(.headline)
                                 .padding(.top, 10)
                             
-                            ForEach(Array(plan.plan.enumerated()), id: \.offset) { index, entry in
+                            ForEach(Array(generatedPlan.enumerated()), id: \.offset) { index, entry in
                                 HStack {
                                     Text("Day \(index + 1):")
                                         .fontWeight(.medium)
@@ -67,7 +59,7 @@ struct FitnessPlanDebugView: View {
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(entry.workoutTitle)
                                             .fontWeight(.semibold)
-                                        Text("\(entry.workoutType) • \(entry.duration)min • \(entry.cyclePhase)")
+                                        Text("\(entry.workoutType.rawValue) • \(entry.duration)min • \(entry.cyclePhase.rawValue)")
                                             .font(.caption)
                                             .foregroundColor(.secondary)
                                     }
@@ -81,29 +73,6 @@ struct FitnessPlanDebugView: View {
                     }
                 }
                 
-                if !savedPlans.isEmpty {
-                    VStack(alignment: .leading) {
-                        Text("Saved Plans:")
-                            .font(.headline)
-                        
-                        ForEach(savedPlans, id: \.self) { url in
-                            HStack {
-                                Text(url.lastPathComponent)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                
-                                Spacer()
-                                
-                                Button("Load") {
-                                    loadPlan(from: url)
-                                }
-                                .buttonStyle(.bordered)
-                                .controlSize(.small)
-                            }
-                        }
-                    }
-                    .padding()
-                }
                 
                 Spacer()
             }
@@ -141,70 +110,13 @@ struct FitnessPlanDebugView: View {
             userPreferences: userPreferences
         )
         
-        // Convert to export format
-        let planExport = FitnessPlanExport(
-            generatedAt: Date(),
-            startDate: actualStartDate,
-            userProfile: UserProfileExport(from: userProfile),
-            userPreferences: UserPreferencesExport(from: userPreferences),
-            plan: plan.map { entry in
-                FitnessPlanEntryExport(
-                    date: entry.date,
-                    workoutTitle: entry.workoutTitle,
-                    workoutDescription: entry.workoutDescription,
-                    duration: entry.duration,
-                    workoutType: entry.workoutType.rawValue,
-                    cyclePhase: entry.cyclePhase.rawValue,
-                    difficulty: entry.difficulty.rawValue,
-                    equipment: entry.equipment,
-                    benefits: entry.benefits,
-                    instructor: entry.instructor,
-                    audioURL: entry.audioURL,
-                    videoURL: entry.videoURL,
-                    isVideo: entry.isVideo,
-                    status: entry.status.rawValue
-                )
-            }
-        )
-        
-        generatedPlan = planExport
+        generatedPlan = plan
         isLoading = false
         
-        alertMessage = "Fitness plan generated and saved to JSON file!"
+        alertMessage = "Fitness plan generated successfully! Generated \(plan.count) entries."
         showingAlert = true
-        
-        // Refresh saved plans list
-        listSavedPlans()
     }
     
-    private func listSavedPlans() {
-        savedPlans = SwiftFitnessRecommendationEngine.getSavedFitnessPlans()
-        SwiftFitnessRecommendationEngine.printSavedPlansList()
-    }
-    
-    private func loadLatestPlan() {
-        if let plan = SwiftFitnessRecommendationEngine.getLatestFitnessPlan() {
-            generatedPlan = plan
-            alertMessage = "Latest plan loaded successfully!"
-            showingAlert = true
-        } else {
-            alertMessage = "Failed to load latest plan"
-            showingAlert = true
-        }
-    }
-    
-    private func loadPlan(from url: URL) {
-        do {
-            let data = try Data(contentsOf: url)
-            let plan = try JSONDecoder().decode(FitnessPlanExport.self, from: data)
-            generatedPlan = plan
-            alertMessage = "Plan loaded from \(url.lastPathComponent)"
-            showingAlert = true
-        } catch {
-            alertMessage = "Failed to load plan: \(error.localizedDescription)"
-            showingAlert = true
-        }
-    }
     
     private func createSampleUserProfile() -> UserProfile {
         let personalizationData = PersonalizationData(userId: UUID())
