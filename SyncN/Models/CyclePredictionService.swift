@@ -252,16 +252,73 @@ public class CyclePredictionService {
             )
         }
         
+<<<<<<< HEAD
         // Generate the fitness plan using the Swift engine
         let weeklyPlan = SwiftFitnessRecommendationEngine.shared.generateWeeklyFitnessPlan(
             for: userProfile,
             startDate: startDate,
+=======
+        // Determine the actual start date based on user's plan start choice
+        let actualStartDate: Date
+        if let personalizationData = userProfile.personalizationData,
+           let planStartChoice = personalizationData.planStartChoice {
+            
+            let calendar = Calendar.current
+            let now = Date()
+            let startOfDay = calendar.startOfDay(for: now)
+            
+            if planStartChoice == .tomorrow {
+                actualStartDate = calendar.date(byAdding: .day, value: 1, to: startOfDay) ?? startOfDay
+                print("🎯 CyclePredictionService: User chose to start plan tomorrow: \(actualStartDate)")
+            } else {
+                actualStartDate = startOfDay
+                print("🎯 CyclePredictionService: User chose to start plan today: \(actualStartDate)")
+            }
+        } else {
+            // Fallback to the provided startDate if no plan start choice is set
+            actualStartDate = startDate
+            print("🎯 CyclePredictionService: No plan start choice, using provided startDate: \(actualStartDate)")
+        }
+        
+        // Generate the fitness plan using the Swift engine with the correct start date
+        let weeklyPlan = SwiftFitnessRecommendationEngine.shared.generateWeeklyFitnessPlan(
+            for: userProfile,
+            startDate: actualStartDate,
+>>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
             userPreferences: userPreferences
         )
         
         return weeklyPlan
     }
     
+<<<<<<< HEAD
+=======
+    // MARK: - Get User's Plan Start Date
+    func getUserPlanStartDate(for userProfile: UserProfile) -> Date {
+        if let personalizationData = userProfile.personalizationData,
+           let planStartChoice = personalizationData.planStartChoice {
+            
+            let calendar = Calendar.current
+            let now = Date()
+            let startOfDay = calendar.startOfDay(for: now)
+            
+            if planStartChoice == .tomorrow {
+                let tomorrowStart = calendar.date(byAdding: .day, value: 1, to: startOfDay) ?? startOfDay
+                print("🎯 CyclePredictionService: User's plan starts tomorrow: \(tomorrowStart)")
+                return tomorrowStart
+            } else {
+                print("🎯 CyclePredictionService: User's plan starts today: \(startOfDay)")
+                return startOfDay
+            }
+        } else {
+            // Fallback to current date if no plan start choice is set
+            let fallbackDate = Calendar.current.startOfDay(for: Date())
+            print("🎯 CyclePredictionService: No plan start choice, using fallback date: \(fallbackDate)")
+            return fallbackDate
+        }
+    }
+    
+>>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
     // MARK: - Log Period Start
     func logPeriodStart(date: Date, bleedDuration: Int, for userProfile: UserProfile) async throws {
         // Note: This endpoint doesn't exist in the new backend yet

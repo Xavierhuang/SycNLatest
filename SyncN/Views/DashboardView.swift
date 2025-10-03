@@ -3,6 +3,89 @@ import SwiftData
 import UIKit
 import TelemetryDeck
 
+<<<<<<< HEAD
+=======
+// MARK: - PersonalizationCard Component (moved to top for scope)
+struct PersonalizationCard: View {
+    let icon: String
+    let title: String
+    let description: String
+    let action: () -> Void
+    let isEnabled: Bool
+    let buttonText: String
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Main content row
+            HStack(spacing: 12) {
+                // Icon
+                ZStack {
+                    Circle()
+                        .fill(Color(red: 0.957, green: 0.408, blue: 0.573).opacity(0.2))
+                        .frame(width: 40, height: 40)
+                    
+                    Image(systemName: icon)
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(Color(red: 0.957, green: 0.408, blue: 0.573))
+                }
+                
+                // Content
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.custom("Sofia Pro", size: 16, relativeTo: .headline))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.leading)
+                    
+                    Text(description)
+                        .font(.custom("Sofia Pro", size: 12, relativeTo: .caption))
+                        .foregroundColor(.white.opacity(0.7))
+                        .multilineTextAlignment(.leading)
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 12)
+            .padding(.bottom, 8)
+            
+            // Get Started Button (right-aligned, below content)
+            HStack {
+                Spacer()
+                
+                Button(action: {
+                    if isEnabled {
+                        TelemetryDeck.signal("Button.Clicked", parameters: [
+                            "buttonType": "personalization_card",
+                            "cardTitle": title,
+                            "buttonText": buttonText
+                        ])
+                        action()
+                    }
+                }) {
+                    HStack(spacing: 4) {
+                        Text(buttonText)
+                            .font(.custom("Sofia Pro", size: 12, relativeTo: .caption))
+                            .fontWeight(.medium)
+                            .foregroundColor(isEnabled ? Color(red: 0.957, green: 0.408, blue: 0.573).opacity(0.8) : Color.gray)
+                        
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(isEnabled ? Color(red: 0.957, green: 0.408, blue: 0.573).opacity(0.8) : Color.gray)
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 12)
+        }
+        .background(Color(red: 0.1, green: 0.12, blue: 0.18))
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+    }
+}
+
+>>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
 // MARK: - Helper Functions
 extension UserProfile {
     func calculateCyclePhaseForDate(_ date: Date) -> CyclePhase {
@@ -37,7 +120,10 @@ struct DashboardView: View {
     @State private var showingLogCustomWorkout = false
     @State private var showingNotificationPrompt = false
     @State private var showingEducationalVideos = false
+<<<<<<< HEAD
     @State private var showingCoachingBooking = false
+=======
+>>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
 
     
     var userProfile: UserProfile? {
@@ -181,7 +267,11 @@ private func enableNotifications() {
             LogPeriodEndView()
         }
         .sheet(isPresented: $showWeeklyPlanEditorFromDashboard) {
+<<<<<<< HEAD
             WeeklyPlanEditorView()
+=======
+            WeeklyPlanEditorView(initialWeek: userProfile != nil ? CyclePredictionService.shared.getUserPlanStartDate(for: userProfile!) : nil)
+>>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
                 .interactiveDismissDisabled(false)
         }
         .sheet(item: $selectedDateWorkout) { workout in
@@ -201,9 +291,12 @@ private func enableNotifications() {
                     ])
                 }
         }
+<<<<<<< HEAD
         .sheet(isPresented: $showingCoachingBooking) {
             CoachingBookingView()
         }
+=======
+>>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
         .onReceive(NotificationCenter.default.publisher(for: .presentWeeklyPlanEditor)) { _ in
             showWeeklyPlanEditorFromDashboard = true
         }
@@ -510,6 +603,7 @@ private func enableNotifications() {
                                 .padding(.horizontal, 20)
                             }
                         }
+<<<<<<< HEAD
                         
                         // Coaching Booking Card - Always show for completed users
                         if let personalization = userPersonalization, personalization.cycleCompleted == true {
@@ -530,6 +624,8 @@ private func enableNotifications() {
                                 .padding(.horizontal, 20)
                             }
                         }
+=======
+>>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
                     }
                     .padding()
                     .padding(.bottom, 80) // Extra bottom padding to account for tab bar
@@ -865,7 +961,11 @@ struct WeeklyTimelineView: View {
         }
 
         .sheet(isPresented: $showingWeeklyPlanEditor) {
+<<<<<<< HEAD
             WeeklyPlanEditorView()
+=======
+            WeeklyPlanEditorView(initialWeek: CyclePredictionService.shared.getUserPlanStartDate(for: profile))
+>>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
         }
     }
     
@@ -2949,6 +3049,7 @@ struct LegendItem: View {
     }
 }
 
+<<<<<<< HEAD
 struct WeeklyPlanEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
@@ -5738,3 +5839,10 @@ struct SimpleSymptomLogButton: View {
     }
 }
 
+=======
+// WeeklyPlanLoader moved to separate file: Models/WeeklyPlanLoader.swift
+// WeeklyPlanEditorView moved to separate file: Views/WeeklyPlanEditorView.swift
+
+// All weekly plan editor components have been cleaned up.
+// The file now contains only the core DashboardView and TodaysMovementView components.
+>>>>>>> 34c6b149dd078a3388481570398d8fb3d1d86e0d
